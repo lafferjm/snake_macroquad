@@ -1,3 +1,4 @@
+use std::collections::LinkedList;
 use macroquad::color;
 use macroquad::input::{is_key_pressed, KeyCode};
 use macroquad::math::{IVec2, ivec2};
@@ -16,32 +17,40 @@ fn window_conf() -> Conf {
     }
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq)]
 enum Direction {
     UP,
     DOWN,
     LEFT,
     RIGHT,
+    STOPPED,
 }
 
 struct Snake {
-    position: IVec2,
     direction: Direction,
+    segments: LinkedList<IVec2>
 }
 
 impl Snake {
     fn new() -> Self {
-        let x = screen_width() as i32 / 2 - 20;
-        let y = screen_height() as i32 / 2 - 20;
+        let starting_x = screen_width() as i32 / 2 - 20;
+        let starting_y = screen_height() as i32 / 2 - 20;
+
+        let mut list: LinkedList<IVec2> = LinkedList::new();
+        for i in 0..3 {
+            list.push_back(ivec2(starting_x, starting_y + i * 20));
+        }
 
         Snake {
-            position: ivec2(x, y),
-            direction: Direction::UP,
+            segments: list,
+            direction: Direction::STOPPED,
         }
     }
 
     fn draw(&self) {
-        draw_rectangle(self.position.x as f32, self.position.y as f32, 20.0, 20.0, color::GREEN);
+        for segment in &self.segments {
+            draw_rectangle(segment.x as f32, segment.y as f32, 20.0, 20.0, color::GREEN);
+        }
     }
 
     fn update(&mut self) {
@@ -50,10 +59,17 @@ impl Snake {
             Direction::DOWN => (0, 1),
             Direction::LEFT => (-1, 0),
             Direction::RIGHT => (1, 0),
+            Direction::STOPPED => (0, 0),
         };
 
-        self.position.x += x * 20;
-        self.position.y += y * 20;
+        if self.direction != Direction::STOPPED {
+            self.segments.pop_back();
+            let head = self.segments.front().unwrap();
+            let x = head.x + x * 20;
+            let y = head.y + y * 20;
+            let new_head = ivec2(x, y);
+            self.segments.push_front(new_head);
+        }
     }
 
     fn process_input(&mut self) {
