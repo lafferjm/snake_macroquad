@@ -1,13 +1,14 @@
 use macroquad::color;
 use macroquad::math::{IVec2, ivec2};
 use macroquad::shapes::draw_rectangle;
+use macroquad::time::get_time;
 use macroquad::window::{clear_background, Conf, next_frame, screen_height, screen_width};
 
 fn window_conf() -> Conf {
     Conf {
         window_title: "Snake".to_owned(),
         fullscreen: false,
-        window_resizable:  false,
+        window_resizable: false,
         window_width: 800,
         window_height: 600,
         ..Default::default()
@@ -23,7 +24,7 @@ enum Direction {
 
 struct Snake {
     position: IVec2,
-    direction: Direction
+    direction: Direction,
 }
 
 impl Snake {
@@ -58,8 +59,12 @@ impl Snake {
 async fn main() {
     let mut snake = Snake::new();
 
+    let mut  last_update = get_time();
     loop {
-        snake.update();
+        if get_time() - last_update > 1.0/30.0 {
+            last_update = get_time();
+            snake.update();
+        }
 
         clear_background(color::BLACK);
         snake.draw();
