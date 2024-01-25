@@ -1,4 +1,5 @@
 use macroquad::color;
+use macroquad::input::{is_key_pressed, KeyCode};
 use macroquad::math::{IVec2, ivec2};
 use macroquad::shapes::draw_rectangle;
 use macroquad::time::get_time;
@@ -15,6 +16,7 @@ fn window_conf() -> Conf {
     }
 }
 
+#[derive(PartialEq, Debug)]
 enum Direction {
     UP,
     DOWN,
@@ -53,6 +55,18 @@ impl Snake {
         self.position.x += x * 20;
         self.position.y += y * 20;
     }
+
+    fn process_input(&mut self) {
+        if is_key_pressed(KeyCode::Up) && self.direction != Direction::DOWN {
+            self.direction = Direction::UP;
+        } else if is_key_pressed(KeyCode::Down) && self.direction != Direction::UP {
+            self.direction = Direction::DOWN;
+        } else if is_key_pressed(KeyCode::Left) && self.direction != Direction::RIGHT {
+            self.direction = Direction::LEFT;
+        } else if is_key_pressed(KeyCode::Right) && self.direction != Direction::LEFT {
+            self.direction = Direction::RIGHT;
+        }
+    }
 }
 
 #[macroquad::main(window_conf)]
@@ -61,6 +75,8 @@ async fn main() {
 
     let mut  last_update = get_time();
     loop {
+        snake.process_input();
+
         if get_time() - last_update > 1.0/30.0 {
             last_update = get_time();
             snake.update();
