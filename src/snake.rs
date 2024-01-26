@@ -2,7 +2,8 @@ use std::collections::LinkedList;
 use macroquad::color;
 use macroquad::input::{is_key_pressed, KeyCode};
 use macroquad::math::{IVec2, ivec2};
-use macroquad::prelude::{draw_rectangle, screen_height, screen_width};
+use macroquad::shapes::{draw_rectangle};
+use macroquad::window::{screen_height, screen_width};
 
 #[derive(PartialEq)]
 enum Direction {

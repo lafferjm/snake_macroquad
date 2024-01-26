@@ -1,9 +1,11 @@
 mod snake;
+mod food;
 
 use macroquad::color;
 use macroquad::time::get_time;
 use macroquad::window::{clear_background, Conf, next_frame};
 use crate::snake::Snake;
+use crate::food::Food;
 
 fn window_conf() -> Conf {
     Conf {
@@ -19,6 +21,7 @@ fn window_conf() -> Conf {
 #[macroquad::main(window_conf)]
 async fn main() {
     let mut snake = Snake::new();
+    let mut food = Food::new();
 
     let mut  last_update = get_time();
     loop {
@@ -30,6 +33,8 @@ async fn main() {
         }
 
         clear_background(color::BLACK);
+
+        food.draw();
         snake.draw();
 
         next_frame().await;
