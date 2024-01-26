@@ -1,5 +1,7 @@
 use crate::food::Food;
+use crate::game_over_screen::GameOverScreen;
 use crate::hud::HUD;
+use crate::main_screen::MainScreen;
 use crate::snake::Snake;
 use macroquad::color;
 use macroquad::input::{is_key_pressed, KeyCode};
@@ -7,8 +9,6 @@ use macroquad::math::IVec2;
 use macroquad::text::Font;
 use macroquad::time::get_time;
 use macroquad::window::{clear_background, next_frame};
-use crate::game_over_screen::GameOverScreen;
-use crate::main_screen::MainScreen;
 
 #[derive(PartialEq)]
 enum GameState {

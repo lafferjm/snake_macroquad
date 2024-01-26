@@ -1,8 +1,8 @@
-use macroquad::math::{IVec2, ivec2};
-use macroquad::text::{draw_text_ex, Font, measure_text, TextParams};
+use macroquad::math::{ivec2, IVec2};
+use macroquad::text::{draw_text_ex, measure_text, Font, TextParams};
 use macroquad::window::screen_width;
 
-pub struct MainScreen  {
+pub struct MainScreen {
     font: Font,
     main_position: IVec2,
     secondary_position: IVec2,
@@ -26,20 +26,30 @@ impl MainScreen {
             font,
             main_position,
             secondary_position,
-        }
+        };
     }
 
     pub fn draw(&self) {
-        draw_text_ex("Snake", self.main_position.x as f32, self.main_position.y as f32, TextParams {
-            font_size: 128,
-            font: Some(&self.font),
-            ..Default::default()
-        });
+        draw_text_ex(
+            "Snake",
+            self.main_position.x as f32,
+            self.main_position.y as f32,
+            TextParams {
+                font_size: 128,
+                font: Some(&self.font),
+                ..Default::default()
+            },
+        );
 
-        draw_text_ex("Press <space> to play!", self.secondary_position.x as f32, self.secondary_position.y as f32, TextParams {
-            font_size: 32,
-            font: Some(&self.font),
-            ..Default::default()
-        });
+        draw_text_ex(
+            "Press <space> to play!",
+            self.secondary_position.x as f32,
+            self.secondary_position.y as f32,
+            TextParams {
+                font_size: 32,
+                font: Some(&self.font),
+                ..Default::default()
+            },
+        );
     }
 }

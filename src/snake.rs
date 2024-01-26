@@ -85,7 +85,11 @@ impl Snake {
     pub fn game_over(&self) -> bool {
         let head = self.segments.front().unwrap();
 
-        if head.x > screen_width() as i32 || head.x < 0 || head.y > screen_height() as i32 || head.y < 0 {
+        if head.x > screen_width() as i32
+            || head.x < 0
+            || head.y > screen_height() as i32
+            || head.y < 0
+        {
             return true;
         }
 
