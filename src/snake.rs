@@ -81,4 +81,20 @@ impl Snake {
         self.segments
             .push_back(ivec2(last_segment.x, last_segment.y));
     }
+
+    pub fn game_over(&self) -> bool {
+        let head = self.segments.front().unwrap();
+
+        if head.x > screen_width() as i32 || head.x < 0 || head.y > screen_height() as i32 || head.y < 0 {
+            return true;
+        }
+
+        for segment in self.segments.iter().skip(1) {
+            if segment.x == head.x && segment.y == head.y {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

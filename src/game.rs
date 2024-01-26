@@ -7,12 +7,20 @@ use macroquad::text::Font;
 use macroquad::time::get_time;
 use macroquad::window::{clear_background, next_frame};
 
+#[derive(PartialEq)]
+enum GameState {
+    MainMenu,
+    Playing,
+    GameOver,
+}
+
 pub struct Game {
     food: Food,
     snake: Snake,
     hud: HUD,
     score: i32,
     ticker: f64,
+    game_state: GameState,
 }
 
 impl Game {
@@ -23,6 +31,7 @@ impl Game {
             hud: HUD::new(String::from("Score: 0"), font),
             score: 0,
             ticker: 0f64,
+            game_state: GameState::Playing
         };
     }
 
@@ -33,21 +42,29 @@ impl Game {
     fn draw(&self) {
         clear_background(color::BLACK);
 
-        self.hud.draw();
-        self.food.draw();
-        self.snake.draw();
+        if self.game_state == GameState::Playing {
+            self.hud.draw();
+            self.food.draw();
+            self.snake.draw();
+        }
     }
 
     fn update(&mut self) {
         if get_time() - self.ticker > 1.0 / 30.0 {
             self.ticker = get_time();
-            self.snake.update();
+            if self.game_state == GameState::Playing {
+                self.snake.update();
 
-            if self.check_collision(self.snake.head(), self.food.get_position()) {
-                self.snake.grow();
-                self.food.regenerate();
-                self.score += 1;
-                self.hud.update_text(self.score);
+                if self.check_collision(self.snake.head(), self.food.get_position()) {
+                    self.snake.grow();
+                    self.food.regenerate();
+                    self.score += 1;
+                    self.hud.update_text(self.score);
+                }
+
+                if self.snake.game_over() {
+                    self.game_state = GameState::GameOver;
+                }
             }
         }
     }
