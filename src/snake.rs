@@ -31,7 +31,7 @@ impl Snake {
 
         Snake {
             segments: list,
-            direction: Direction::STOPPED,
+            direction: Direction::UP,
         }
     }
 

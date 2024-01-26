@@ -2,6 +2,8 @@ mod food;
 mod game;
 mod hud;
 mod snake;
+mod game_over_screen;
+mod main_screen;
 
 use macroquad::text::load_ttf_font;
 use macroquad::window::Conf;

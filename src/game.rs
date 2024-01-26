@@ -2,10 +2,13 @@ use crate::food::Food;
 use crate::hud::HUD;
 use crate::snake::Snake;
 use macroquad::color;
+use macroquad::input::{is_key_pressed, KeyCode};
 use macroquad::math::IVec2;
 use macroquad::text::Font;
 use macroquad::time::get_time;
 use macroquad::window::{clear_background, next_frame};
+use crate::game_over_screen::GameOverScreen;
+use crate::main_screen::MainScreen;
 
 #[derive(PartialEq)]
 enum GameState {
@@ -21,6 +24,8 @@ pub struct Game {
     score: i32,
     ticker: f64,
     game_state: GameState,
+    game_over_screen: GameOverScreen,
+    main_screen: MainScreen,
 }
 
 impl Game {
@@ -28,10 +33,12 @@ impl Game {
         return Game {
             food: Food::new(),
             snake: Snake::new(),
-            hud: HUD::new(String::from("Score: 0"), font),
+            hud: HUD::new(String::from("Score: 0"), font.clone()),
             score: 0,
             ticker: 0f64,
-            game_state: GameState::Playing
+            game_state: GameState::MainMenu,
+            game_over_screen: GameOverScreen::new(font.clone()),
+            main_screen: MainScreen::new(font.clone()),
         };
     }
 
@@ -47,9 +54,37 @@ impl Game {
             self.food.draw();
             self.snake.draw();
         }
+
+        if self.game_state == GameState::GameOver {
+            self.game_over_screen.draw();
+        }
+
+        if self.game_state == GameState::MainMenu {
+            self.main_screen.draw();
+        }
     }
 
     fn update(&mut self) {
+        if self.game_state == GameState::Playing {
+            self.snake.process_input();
+        }
+
+        if self.game_state == GameState::GameOver {
+            if is_key_pressed(KeyCode::Space) {
+                self.snake = Snake::new();
+                self.food = Food::new();
+                self.score = 0;
+                self.hud.update_text(0);
+                self.game_state = GameState::Playing;
+            }
+        }
+
+        if self.game_state == GameState::MainMenu {
+            if is_key_pressed(KeyCode::Space) {
+                self.game_state = GameState::Playing;
+            }
+        }
+
         if get_time() - self.ticker > 1.0 / 30.0 {
             self.ticker = get_time();
             if self.game_state == GameState::Playing {
@@ -73,8 +108,6 @@ impl Game {
         self.ticker = get_time();
 
         loop {
-            self.snake.process_input();
-
             self.update();
             self.draw();
 
