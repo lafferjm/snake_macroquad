@@ -71,4 +71,13 @@ impl Snake {
             self.direction = Direction::RIGHT;
         }
     }
+
+    pub fn head(&self) -> &IVec2 {
+        return self.segments.front().unwrap();
+    }
+
+    pub fn grow(&mut self) {
+        let last_segment = self.segments.back().unwrap();
+        self.segments.push_back(ivec2(last_segment.x,last_segment.y));
+    }
 }
