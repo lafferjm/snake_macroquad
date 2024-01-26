@@ -1,7 +1,6 @@
 use crate::food::Food;
-use crate::game_over_screen::GameOverScreen;
 use crate::hud::HUD;
-use crate::main_screen::MainScreen;
+use crate::screen::Screen;
 use crate::snake::Snake;
 use macroquad::color;
 use macroquad::input::{is_key_pressed, KeyCode};
@@ -24,8 +23,8 @@ pub struct Game {
     score: i32,
     ticker: f64,
     game_state: GameState,
-    game_over_screen: GameOverScreen,
-    main_screen: MainScreen,
+    game_over_screen: Screen,
+    main_screen: Screen,
 }
 
 impl Game {
@@ -37,8 +36,16 @@ impl Game {
             score: 0,
             ticker: 0f64,
             game_state: GameState::MainMenu,
-            game_over_screen: GameOverScreen::new(font.clone()),
-            main_screen: MainScreen::new(font.clone()),
+            game_over_screen: Screen::new(
+                font.clone(),
+                String::from("Game Over"),
+                String::from("Press <space> to start over!"),
+            ),
+            main_screen: Screen::new(
+                font.clone(),
+                String::from("Snake"),
+                String::from("Press <space> to play!"),
+            ),
         };
     }
 
