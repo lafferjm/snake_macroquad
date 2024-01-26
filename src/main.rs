@@ -1,5 +1,6 @@
 mod food;
 mod game;
+mod hud;
 mod snake;
 
 use macroquad::text::load_ttf_font;

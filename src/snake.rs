@@ -1,9 +1,9 @@
-use std::collections::LinkedList;
 use macroquad::color;
 use macroquad::input::{is_key_pressed, KeyCode};
-use macroquad::math::{IVec2, ivec2};
-use macroquad::shapes::{draw_rectangle};
+use macroquad::math::{ivec2, IVec2};
+use macroquad::shapes::draw_rectangle;
 use macroquad::window::{screen_height, screen_width};
+use std::collections::LinkedList;
 
 #[derive(PartialEq)]
 enum Direction {
@@ -16,7 +16,7 @@ enum Direction {
 
 pub struct Snake {
     direction: Direction,
-    segments: LinkedList<IVec2>
+    segments: LinkedList<IVec2>,
 }
 
 impl Snake {
@@ -78,6 +78,7 @@ impl Snake {
 
     pub fn grow(&mut self) {
         let last_segment = self.segments.back().unwrap();
-        self.segments.push_back(ivec2(last_segment.x,last_segment.y));
+        self.segments
+            .push_back(ivec2(last_segment.x, last_segment.y));
     }
 }
