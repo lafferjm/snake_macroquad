@@ -2,6 +2,7 @@ mod food;
 mod game;
 mod snake;
 
+use macroquad::text::load_ttf_font;
 use macroquad::window::Conf;
 
 use crate::game::Game;
@@ -19,6 +20,8 @@ fn window_conf() -> Conf {
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let mut game = Game::new();
+    let font = load_ttf_font("./Harabara.ttf").await.unwrap();
+
+    let mut game = Game::new(font);
     game.run().await;
 }
